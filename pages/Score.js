@@ -48,7 +48,7 @@ function Score() {
                 }}>Score is {String(score)}</p>
 
                 <Button
-                    onClick={() => router.push("Test")}
+                    onClick={() => router.push("/")}
                     style={{
                         fontSize: 15, background: "#270c39", color: "#FFF", width: 150, fontWeight: 600
                     }} className='get'>Go To Home</Button>

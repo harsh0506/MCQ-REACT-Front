@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'rsuite'
 import { useRouter } from 'next/router'
+import axios from 'axios';
 
 function Test() {
 
@@ -8,12 +9,13 @@ function Test() {
 
     const [mcqs, setMcqs] = React.useState([
         {
-            question: "",
-            ans: "",
-            op1: "",
-            op2: "",
-            op3: "",
-            op4: ""
+            Question: "",
+            Ans: "",
+            O1: "",
+            O2: "",
+            O3: "",
+            O4: "",
+            Sub:""
         }
     ]);
 
@@ -26,7 +28,7 @@ function Test() {
     let [score, setScore] = React.useState(0);
 
     React.useEffect(() => {
-        setMcqs(data);
+        GetQuestions().then(res => setMcqs(res.mcqs)).catch(err => console.log(err))
     }, []);
 
     return (
@@ -96,7 +98,7 @@ function Test() {
                     <span className="question" style={{
                         color: "#dabbc4", height: 100
                     }}>
-                        {mcqs[index].question}
+                        {mcqs[index].Question}
                     </span>
                 </div>
                 <div className="container options" style={{
@@ -111,24 +113,24 @@ function Test() {
                                 onClick={() => null}
                                 style={{
                                     margin: 5, fontSize: 15, background: "#903eb3", color: "#270c39", width: 150, fontWeight: 600
-                                }} className='get'> {mcqs[index].op1}</Button>
+                                }} className='get'> {mcqs[index].O1}</Button>
                             <Button
                                 onClick={() => null}
                                 style={{
                                     margin: 5, fontSize: 15, background: "#903eb3", color: "#270c39", width: 150, fontWeight: 600
-                                }} className='get'> {mcqs[index].op2}</Button>
+                                }} className='get'> {mcqs[index].O2}</Button>
                         </div>
                         <div className="col" style={{ gap: 10 }}>
                             <Button
                                 onClick={() => null}
                                 style={{
                                     margin: 5, fontSize: 15, background: "#903eb3", color: "#270c39", width: 150, fontWeight: 600
-                                }} className='get'> {mcqs[index].op3}</Button>
+                                }} className='get'> {mcqs[index].O3}</Button>
                             <Button
                                 onClick={() => null}
                                 style={{
                                     margin: 5, fontSize: 15, background: "#903eb3", color: "#270c39", width: 150, fontWeight: 600
-                                }} className='get'> {mcqs[index].op4}</Button>
+                                }} className='get'> {mcqs[index].O4}</Button>
                         </div>
                     </div>
 
@@ -139,7 +141,7 @@ function Test() {
                     }}>
                         <h5 style={{
                             color: "#dabbc4", display: style
-                        }}> {mcqs[index].ans}</h5>
+                        }}> {mcqs[index].Ans}</h5>
                     </div>
                 </div>
                 <div className="button-Submit">
@@ -147,7 +149,7 @@ function Test() {
                     <Button
                         onClick={() => {
                             style === "none" ? setStyle("block") : setStyle("none");
-                            givenAns === mcqs[index].ans ? setScore(++score) : setScore(score);
+                            givenAns === mcqs[index].Ans ? setScore(++score) : setScore(score);
                         }}
                         style={{
                             margin: 5, fontSize: 15, background: "#903eb3", color: "#270c39", width: 150, fontWeight: 600
@@ -157,7 +159,7 @@ function Test() {
                         onClick={() => {
                             router.push({
                                 pathname: 'Score',
-                                query: {score , len : mcqs.length},
+                                query: { score, len: mcqs.length },
                             })
                         }}
                         style={{
@@ -171,6 +173,14 @@ function Test() {
 }
 
 export default Test
+
+export async function GetQuestions() {
+    try {
+        return (await axios.get("http://localhost:4500/MCQs")).data
+    } catch (error) {
+        return error
+    }
+}
 
 const data = [
     {
